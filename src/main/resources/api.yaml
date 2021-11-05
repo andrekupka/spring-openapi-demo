@@ -1,0 +1,81 @@
+openapi: "3.0.2"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: http://localhost:8080
+    description: Local testing server
+paths:
+  /users:
+    get:
+      description: Manage a list of users.
+      operationId: getUsers
+      responses:
+        '200':
+          description: Returns a list of all users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+    post:
+      description: Creates a new user.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: Creates a new user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Max Mustermann
+          minLength: 1
+          maxLength: 255
+        birthday:
+          type: string
+          example: 1993-09-14
+          format: date
+      required:
+        - name
+        - birthday
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123
+          minLength: 1
+          maxLength: 36
+          pattern: '^[0-9a-z]+$'
+        name:
+          type: string
+          example: Max Mustermann
+          minLength: 1
+          maxLength: 255
+        birthday:
+          type: string
+          example: 1993-09-14
+          format: date
+      required:
+        - id
+        - name
+        - birthday
+    UserList:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
