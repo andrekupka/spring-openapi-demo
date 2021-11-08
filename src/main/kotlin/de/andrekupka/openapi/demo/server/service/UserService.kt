@@ -24,6 +24,8 @@ class UserService {
         return user
     }
 
+    fun deleteUser(id: String): Boolean = userMap.remove(id) != null
+
     private fun CreateUserCommand.toUser(id: String) = User(
             id = id,
             name = name,

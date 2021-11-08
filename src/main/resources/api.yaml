@@ -8,11 +8,11 @@ servers:
 paths:
   /users:
     get:
-      description: Manage a list of users.
+      description: Returns a list of all users.
       operationId: getUsers
       responses:
         '200':
-          description: Returns a list of all users.
+          description: The list of all users.
           content:
             application/json:
               schema:
@@ -33,6 +33,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        schema:
+          type: string
+    get:
+      description: Returns a single user.
+      operationId: getUser
+      responses:
+        '200':
+          description: The user with the given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: The user was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: Deletes a single user.
+      operationId: deleteUser
+      responses:
+        '204':
+          description: The user has been deleted.
+        '404':
+          description: The user was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     CreateUserRequest:
@@ -79,3 +115,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: '^[a-z]+(_[a-z]+)*$'
+        description:
+          type: string
+          minLength: 1
+          maxLength: 255
